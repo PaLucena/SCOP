@@ -1,7 +1,7 @@
 NAME = SCOP
 
 CC = clang
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -lGLEW -lGL -o $(NAME)
 
 SRC_PATH = src/
 SRC = src/scop.c
