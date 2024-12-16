@@ -4,18 +4,20 @@ SRC_DIR = src
 INC_DIR = include
 OBJ_DIR = obj
 
-CC = gcc
-CFLAGS = -Wall -Wextra -I$(INC_DIR)
+CC = c++
+CPPFLAGS = -Wall -Wextra -I$(INC_DIR)
 LIBS = -lglfw -lGLEW -lGL
 
-SRCS = $(wildcard $(SRC_DIR)/*.c)
-OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
+
+all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
+	$(CC) $(CPPFLAGS) -o $@ $(OBJS) $(LIBS)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CC) $(CPPFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
@@ -26,4 +28,6 @@ clean:
 fclean: clean
 	rm -rf $(TARGET)
 
-.PHONY: clean clean-all
+re: clean all
+
+.PHONY: all clean fclean re
