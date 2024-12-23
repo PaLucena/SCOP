@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 20:47:07 by palucena          #+#    #+#             */
-/*   Updated: 2024/12/16 02:00:12 by palucena         ###   ########.fr       */
+/*   Updated: 2024/12/23 18:25:57 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,19 @@ GLuint	LoadShaders(const char *vertex_file_path, const char *fragment_file_path)
 		std::vector<char>	VertexShaderErrorMessage(infoLogLength + 1);
 		glGetShaderInfoLog(VertexShaderID, infoLogLength, NULL, &VertexShaderErrorMessage[0]);
 		std::cout << &VertexShaderErrorMessage[0] << std::endl;
+	}
+
+	std::cout << "Compiling shader: " << fragment_file_path << std::endl;
+	const char	*FragmentSourcePointer = FragmentShaderCode.c_str();
+	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer, NULL);
+	glCompileShader(FragmentShaderID);
+	
+	glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+	if (infoLogLength > 0) {
+		std::vector<char> fragmentShaderErrorMessage(infoLogLength + 1);
+		glGetShaderInfoLog(FragmentShaderID, infoLogLength, NULL, &fragmentShaderErrorMessage[0]);
+		std::cout << &fragmentShaderErrorMessage[0] << std::endl;
 	}
 
 	std::cout << "Linking program" << std::endl;
