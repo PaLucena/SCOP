@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 20:47:17 by palucena          #+#    #+#             */
-/*   Updated: 2024/12/23 18:20:48 by palucena         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:38:43 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int main() {
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
-	GLuint	programID = LoadShaders("src/vertexShader.glsl", "src/fragmentShader.glsl");
+	GLuint	programID = LoadShaders("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
 
 	GLuint	MatrixID = glGetUniformLocation(programID, "MVP");
 	// Projection matrix
