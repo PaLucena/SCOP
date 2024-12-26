@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 20:47:21 by palucena          #+#    #+#             */
-/*   Updated: 2024/12/23 18:25:43 by palucena         ###   ########.fr       */
+/*   Updated: 2024/12/26 17:35:36 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@
 #define WIDTH 1024
 #define HEIGHT 768
 
+void	throwError(const std::string &str);
+
 GLuint	LoadShaders(const char *vertex_file_path, const char *fragmen_file_path);
+GLuint	loadBMP(const std::string &imgPath);
 
 #endif
