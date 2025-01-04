@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 20:47:17 by palucena          #+#    #+#             */
-/*   Updated: 2024/12/26 17:34:38 by palucena         ###   ########.fr       */
+/*   Updated: 2025/01/04 11:37:03 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ int main() {
 	// Accept fragment if it is closer to the camera than the former one
 	glDepthFunc(GL_LESS);
 
+	// Cull triangles which normal is not towards the camera
+	glEnable(GL_CULL_FACE);
+
 	GLuint	VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
@@ -59,14 +62,6 @@ int main() {
 	GLuint	programID = LoadShaders("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
 
 	GLuint	MatrixID = glGetUniformLocation(programID, "MVP");
-	// Projection matrix
-	glm::mat4	projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
-	// View (camera) matrix
-	glm::mat4	view = glm::lookAt(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	// Model matrix
-	glm::mat4	model = glm::mat4(1.0f);
-	// MVP (model view projection) matrix
-	glm::mat4	MVP = projection * view * model;
 
 	// Load the texture
 	GLuint texture = loadBMP("resources/uvtemplate.bmp");
@@ -169,6 +164,13 @@ int main() {
 
 		glUseProgram(programID);
 
+		// Compute the MVP matrix from keyboard and mouse input
+		computeMatricesFromInput(window);
+		glm::mat4	projectionM = getProjectionMatrix();
+		glm::mat4	viewM = getViewMatrix();
+		glm::mat4	modelM = glm::mat4(1.0f);
+		glm::mat4	MVP = projectionM * viewM * modelM;
+
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
 		// Bind our texture in Texture Unit 0
@@ -214,6 +216,7 @@ int main() {
 	glDeleteBuffers(1, &vertexBuffer);
 	glDeleteBuffers(1, &uvBuffer);
 	glDeleteProgram(programID);
+	glDeleteTextures(1, &textureID);
 	glDeleteVertexArrays(1, &VertexArrayID);
 
 	glfwTerminate();

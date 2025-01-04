@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 20:47:21 by palucena          #+#    #+#             */
-/*   Updated: 2024/12/26 17:35:36 by palucena         ###   ########.fr       */
+/*   Updated: 2025/01/04 11:22:10 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,15 @@
 
 void	throwError(const std::string &str);
 
+// loadShaders.cpp
 GLuint	LoadShaders(const char *vertex_file_path, const char *fragmen_file_path);
+
+// loadBMP.cpp
 GLuint	loadBMP(const std::string &imgPath);
+
+// controls.cpp
+glm::mat4	getProjectionMatrix();
+glm::mat4	getViewMatrix();
+void	computeMatricesFromInput(GLFWwindow	*window);
 
 #endif
