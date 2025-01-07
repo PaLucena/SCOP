@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 20:47:21 by palucena          #+#    #+#             */
-/*   Updated: 2025/01/04 11:22:10 by palucena         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:58:32 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SCOP_HPP
 
 #include <stdlib.h>
+#include <string.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -36,6 +37,9 @@ GLuint	LoadShaders(const char *vertex_file_path, const char *fragmen_file_path);
 
 // loadBMP.cpp
 GLuint	loadBMP(const std::string &imgPath);
+
+// loadOBJ
+bool	loadOBJ(const std::string path, std::vector<glm::vec3> &outVertices, std::vector<glm::vec2> &outUVs, std::vector<glm::vec3> &outNormals);
 
 // controls.cpp
 glm::mat4	getProjectionMatrix();
