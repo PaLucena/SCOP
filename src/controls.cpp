@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 10:34:48 by palucena          #+#    #+#             */
-/*   Updated: 2025/01/04 11:37:36 by palucena         ###   ########.fr       */
+/*   Updated: 2025/01/07 17:44:15 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,11 @@ void	computeMatricesFromInput(GLFWwindow	*window) {
 
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		position += direction * deltaTime * speed;
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		position -= direction * deltaTime * speed;
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		position += right * deltaTime * speed;
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		position -= right * deltaTime * speed;
 
 	projectionMatrix = glm::perspective(glm::radians(FoV), 4.0f / 3.0f, 0.1f, 100.0f);
