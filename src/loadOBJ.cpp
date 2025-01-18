@@ -6,21 +6,21 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 17:48:08 by palucena          #+#    #+#             */
-/*   Updated: 2025/01/07 19:04:21 by palucena         ###   ########.fr       */
+/*   Updated: 2025/01/14 17:48:53 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.hpp"
 
-bool	loadOBJ(const std::string path, std::vector<glm::vec3> &outVertices, std::vector<glm::vec2> &outUVs, std::vector<glm::vec3> &outNormals) {
+bool	loadOBJ(const std::string path, std::vector<std::vector<double>> &outVertices, std::vector<std::vector<double>> &outUVs, std::vector<std::vector<double>> &outNormals) {
 	std::vector<unsigned int>	vertexIndices, uvIndices, normalIndices;
-	std::vector<glm::vec3>		tempVertices;
-	std::vector<glm::vec2>		tempUVs;
-	std::vector<glm::vec3>		tempNormals;
+	std::vector<std::vector<double>>		tempVertices;
+	std::vector<std::vector<double>>		tempUVs;
+	std::vector<std::vector<double>>		tempNormals;
 
 	FILE	*file = fopen(path.c_str(), "r");
 	if (file  == NULL) {
-		std::cerr << "Impossible to open file" << std::endl;
+		std::cerr << "Impossible to open file: " << "path" << std::endl;
 		return (false);
 	}
 
@@ -30,18 +30,18 @@ bool	loadOBJ(const std::string path, std::vector<glm::vec3> &outVertices, std::v
 		if (res == EOF)
 			break ;
 		if (strcmp(lineHeader, "v") == 0) {
-			glm::vec3	vertex;
-			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+			std::vector<double>	vertex;
+			fscanf(file, "%lf %lf %lf\n", &vertex[0], &vertex[1], &vertex[2]);
 			tempVertices.push_back(vertex);
 		}
 		else if (strcmp(lineHeader, "vt") == 0) {
-			glm::vec2	uv;
-			fscanf(file, "%f %f\n", &uv.x, &uv.y);
+			std::vector<double>	uv;
+			fscanf(file, "%lf %lf\n", &uv[0], &uv[1]);
 			tempUVs.push_back(uv);
 		}
 		else if (strcmp(lineHeader, "vn") == 0) {
-			glm::vec3	normal;
-			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+			std::vector<double>	normal;
+			fscanf(file, "%lf %lf %lf\n", &normal[0], &normal[1], &normal[2]);
 			tempNormals.push_back(normal);
 		}
 		else if (strcmp(lineHeader, "f") == 0) {
@@ -72,9 +72,9 @@ bool	loadOBJ(const std::string path, std::vector<glm::vec3> &outVertices, std::v
 		unsigned int	vertexIndex = vertexIndices[i];
 		unsigned int	uvIndex = uvIndices[i];
 		unsigned int	normalIndex = normalIndices[i];
-		glm::vec3		vertex = tempVertices[vertexIndex - 1];
-		glm::vec2		uv = tempUVs[uvIndex - 1];
-		glm::vec3		normal = tempNormals[normalIndex - 1];
+		std::vector<double>		vertex = tempVertices[vertexIndex - 1];
+		std::vector<double>		uv = tempUVs[uvIndex - 1];
+		std::vector<double>		normal = tempNormals[normalIndex - 1];
 		outVertices.push_back(vertex);
 		outUVs.push_back(uv);
 		outNormals.push_back(normal);

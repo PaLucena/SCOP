@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 20:47:21 by palucena          #+#    #+#             */
-/*   Updated: 2025/01/07 18:58:32 by palucena         ###   ########.fr       */
+/*   Updated: 2025/01/14 19:27:37 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "math.hpp"
 
 #define WIDTH 1024
 #define HEIGHT 768
@@ -39,11 +40,11 @@ GLuint	LoadShaders(const char *vertex_file_path, const char *fragmen_file_path);
 GLuint	loadBMP(const std::string &imgPath);
 
 // loadOBJ
-bool	loadOBJ(const std::string path, std::vector<glm::vec3> &outVertices, std::vector<glm::vec2> &outUVs, std::vector<glm::vec3> &outNormals);
+bool	loadOBJ(const std::string path, std::vector<std::vector<double>> &outVertices, std::vector<std::vector<double>> &outUVs, std::vector<std::vector<double>> &outNormals);
 
 // controls.cpp
-glm::mat4	getProjectionMatrix();
-glm::mat4	getViewMatrix();
+std::vector<std::vector<double>>	getProjectionMatrix();
+std::vector<std::vector<double>>	getViewMatrix();
 void	computeMatricesFromInput(GLFWwindow	*window);
 
 #endif

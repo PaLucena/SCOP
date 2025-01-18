@@ -6,16 +6,16 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 10:34:48 by palucena          #+#    #+#             */
-/*   Updated: 2025/01/07 17:44:15 by palucena         ###   ########.fr       */
+/*   Updated: 2025/01/14 19:27:27 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scop.hpp"
 
-glm::mat4	projectionMatrix;
-glm::mat4	viewMatrix;
+std::vector<std::vector<double>>	projectionMatrix;
+std::vector<std::vector<double>>	viewMatrix;
 
-glm::vec3	position = glm::vec3(0, 0, 5);
+std::vector<double>	position = {0, 0, 5};
 float		horizontalAngle = 3.14f;
 float		verticalAngle = 0.0f;
 float		FoV = 45.0f;
@@ -26,11 +26,11 @@ float		mouseSpeed = 0.005f;
 int			width;
 int			height;
 
-glm::mat4	getProjectionMatrix() {
+std::vector<std::vector<double>>	getProjectionMatrix() {
 	return (projectionMatrix);
 }
 
-glm::mat4	getViewMatrix() {
+std::vector<std::vector<double>>	getViewMatrix() {
 	return (viewMatrix);
 }
 
@@ -48,17 +48,17 @@ void	computeMatricesFromInput(GLFWwindow	*window) {
 	horizontalAngle += mouseSpeed * float(width / 2 - xpos);
 	verticalAngle += mouseSpeed * float(height / 2 - ypos);
 	
-	glm::vec3	direction(
+	std::vector<double>	direction = {
 		cos(verticalAngle) * sin(horizontalAngle),
 		sin(verticalAngle),
 		cos(verticalAngle) * cos(horizontalAngle)
-	);
+	};
 
-	glm::vec3	right = glm::vec3(
+	std::vector<double>	right = {
 		sin(horizontalAngle - 3.14f/2.0f),
 		0,
 		cos(horizontalAngle - 3.14f/2.0f)
-	);
+	};
 
 	glm::vec3	up = glm::cross(right, direction);
 

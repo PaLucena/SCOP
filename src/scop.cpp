@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 20:47:17 by palucena          #+#    #+#             */
-/*   Updated: 2025/01/07 21:37:47 by palucena         ###   ########.fr       */
+/*   Updated: 2025/01/14 19:35:37 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ int	kickstartGLFW() {
 	return 0;
 }
 
-int main() {
+int main(int ac, char **av) {
+	if (ac != 2)
+		throwError("Wrong number of arguments");
+
 	kickstartGLFW();
 
 	GLFWwindow	*window;
@@ -47,12 +50,9 @@ int main() {
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
-	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
-	// Accept fragment if it is closer to the camera than the former one
 	glDepthFunc(GL_LESS);
 
-	// Cull triangles which normal is not towards the camera
 	glEnable(GL_CULL_FACE);
 
 	GLuint	VertexArrayID;
@@ -63,15 +63,13 @@ int main() {
 
 	GLuint	MatrixID = glGetUniformLocation(programID, "MVP");
 
-	// Load the texture
 	GLuint texture = loadBMP("resources/uvtemplate.bmp");
-	// Get a handle for our "myTextureSampler" uniform
 	GLuint textureID  = glGetUniformLocation(programID, "myTextureSampler");
 
-	std::vector<glm::vec3>	vertices;
-	std::vector<glm::vec2>	UVs;
-	std::vector<glm::vec3>	normals;
-	if (loadOBJ("resources/suzanne.obj", vertices, UVs, normals) == false)
+	std::vector<std::vector<double>> vertices; // std::vector<glm::vec3>	vertices;
+	std::vector<std::vector<double>>	UVs;
+	std::vector<std::vector<double>>	normals;
+	if (loadOBJ("resources/" + std::string(av[1]), vertices, UVs, normals) == false)
 		exit (1);
 
 	GLuint vertexBuffer;
@@ -94,32 +92,30 @@ int main() {
 
 		glUseProgram(programID);
 
-		// Compute the MVP matrix from keyboard and mouse input
 		computeMatricesFromInput(window);
-		glm::mat4	projectionM = getProjectionMatrix();
-		glm::mat4	viewM = getViewMatrix();
-		glm::mat4	modelM = glm::mat4(1.0f);
-		glm::mat4	MVP = projectionM * viewM * modelM;
+		std::vector<std::vector<double>>	projectionM = getProjectionMatrix();
+		std::vector<std::vector<double>>	viewM = getViewMatrix();
+		std::vector<std::vector<double>>	modelM(4, std::vector<double>(4, 0.0));
+		for (size_t i = 0; i < 4; ++i) {
+			modelM[i][i] = 1.0;
+		}
+
+		std::vector<std::vector<double>>	MVP = projectionM * viewM * modelM;
 
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
-		// Bind our texture in Texture Unit 0
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
-		// Set our "myTextureSampler" sampler to use Texture Unit 0
 		glUniform1i(textureID, 0);
 
-		// 1rst attribute buffer : vertices
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-		// 2nd attribute buffer : UVs
 		glEnableVertexAttribArray(1);
 		glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-		// 3rd attribute buffer : normals
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
