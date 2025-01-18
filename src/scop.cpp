@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 20:47:17 by palucena          #+#    #+#             */
-/*   Updated: 2025/01/14 19:35:37 by palucena         ###   ########.fr       */
+/*   Updated: 2025/01/18 15:41:37 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int main(int ac, char **av) {
 	GLuint texture = loadBMP("resources/uvtemplate.bmp");
 	GLuint textureID  = glGetUniformLocation(programID, "myTextureSampler");
 
-	std::vector<std::vector<double>> vertices; // std::vector<glm::vec3>	vertices;
+	std::vector<std::vector<double>> vertices;
 	std::vector<std::vector<double>>	UVs;
 	std::vector<std::vector<double>>	normals;
 	if (loadOBJ("resources/" + std::string(av[1]), vertices, UVs, normals) == false)
@@ -75,17 +75,17 @@ int main(int ac, char **av) {
 	GLuint vertexBuffer;
 	glGenBuffers(1, &vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(std::vector<std::vector<double>>), &vertices[0], GL_STATIC_DRAW);
 
 	GLuint uvBuffer;
 	glGenBuffers(1, &uvBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
-	glBufferData(GL_ARRAY_BUFFER, UVs.size() * sizeof(glm::vec2), &UVs[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, UVs.size() * sizeof(std::vector<std::vector<double>>), &UVs[0], GL_STATIC_DRAW);
 
 	GLuint normalBuffer;
 	glGenBuffers(1, &normalBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
-	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(std::vector<std::vector<double>>), &normals[0], GL_STATIC_DRAW);
 
 	do {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -100,9 +100,10 @@ int main(int ac, char **av) {
 			modelM[i][i] = 1.0;
 		}
 
-		std::vector<std::vector<double>>	MVP = projectionM * viewM * modelM;
+		std::vector<std::vector<double>>	MVP = multiplyMatrix(multiplyMatrix(projectionM, viewM), modelM);
 
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+		GLfloat	value = static_cast<GLfloat>(MVP[0][0]);
+		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &value);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);

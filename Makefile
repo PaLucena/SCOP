@@ -5,10 +5,10 @@ INC_DIR = include
 OBJ_DIR = obj
 
 CC = c++
-CPPFLAGS = -Wall -Wextra -I$(INC_DIR)
+CPPFLAGS = -Wall -Wextra -I$(INC_DIR) -fsanitize=address
 LIBS = -lglfw -lGLEW -lGL
 
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 
 all: $(TARGET)
@@ -16,11 +16,10 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(CPPFLAGS) -o $@ $(OBJS) $(LIBS)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@ mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) -c $< -o $@
 
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
 
 clean:
 	rm -rf $(OBJ_DIR)
